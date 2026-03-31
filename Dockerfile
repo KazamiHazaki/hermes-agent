@@ -1,7 +1,10 @@
 FROM debian:13.4
 
-RUN echo "nameserver 1.1.1.1" >> /etc/resolv.conf && \
-    echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+# Set DNS for the image (after the base image is pulled)
+RUN mkdir -p /etc/resolvconf/resolv.conf.d && \
+    echo "nameserver 1.1.1.1" > /etc/resolvconf/resolv.conf.d/head && \
+    echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/head && \
+    resolvconf -u
     
 RUN apt-get update
 RUN apt-get install -y nodejs npm python3 python3-pip ripgrep ffmpeg gcc python3-dev libffi-dev
